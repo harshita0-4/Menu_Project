@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Command Input</title>
+    <style>
+        /* The same CSS as before */
+        body {
+            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+            display: block;
+            text-align: left;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #74ebd5;
+            box-shadow: 0 0 8px rgba(116, 235, 213, 0.5);
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #9face6 0%, #74ebd5 100%);
+        }
+
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-family: monospace;
+            color: #333;
+            text-align: left;
+            white-space: pre-wrap;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Run Docker Command</h1>
+        <form id="dockerForm">
+            <div class="input-container">
+                <label for="command">Enter Docker Command:</label>
+                <input type="text" id="command" name="command" placeholder="e.g., docker ps">
+            </div>
+            <button type="submit">Run Command</button>
+        </form>
+        <div id="output" class="output"></div>
+    </div>
+    <script>
+        document.getElementById('dockerForm').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent the default form submission
+    
+    const command = document.getElementById('command').value;
+    const outputDiv = document.getElementById('output');
+    
+    if (command.trim() === '') {
+        outputDiv.style.display = 'block';
+        outputDiv.textContent = 'Please enter a Docker command.';
+        return;
+    }
+
+    fetch('/docker', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'  // Use form URL encoded data
+        },
+        body: new URLSearchParams({ command })  // Send form data
+    })
+    .then(response => response.text())  // Expect plain text response
+    .then(data => {
+        outputDiv.style.display = 'block';
+        outputDiv.textContent = `Command output:\n\n${data}`;
+    })
+    .catch(error => {
+        outputDiv.style.display = 'block';
+        outputDiv.textContent = `Error: ${error.message}`;
+    });
+});
+
+    </script>
+</body>
+</html>

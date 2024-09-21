@@ -1,0 +1,25 @@
+<script>
+    function lwcmd(){
+    
+        let y = document.getElementById("in1");
+        let cmd = y.value;
+        let url = "http://65.1.84.10:5000/execute?c=" + encodeURIComponent(cmd);
+    
+        let xhr = new XMLHttpRequest();
+    
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                let x = document.getElementById("d1");
+                x.innerHTML = "#>>>  " + xhr.responseText;
+            }
+        }
+        xhr.open("GET", url, true);
+        xhr.send();
+    }
+    </script>
+
+    <input name="c" onkeyup="lwcmd()" id="in1" />
+    
+    <button onclick="lwcmd()">Enter</button>
+    
+    <div id="d1">#>>> </div>
