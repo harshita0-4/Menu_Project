@@ -53,7 +53,7 @@
     <div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light navnav ">
             <div class="container-fluid">
-                <a class="navbar-brand" id="Project_name" href="integrate.html">Python Services</a>
+                <a class="navbar-brand" id="Project_name" href="/integrate.html">Project Linux World</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -95,50 +95,13 @@
         </nav>
     </div>
 
-    <div class="main_body">
-        <div class="row_of_services">
-            <div class="column_of_services">
-              <div class="card text-center">
-                <div class="card-header">
-                  Email
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">send email</h5>
-                  <p class="card-text">Easily send email without any hustle</p>
-                  <a href="email_pyhton.html" class="btn btn-primary">send email</a>
-                </div>
-                
-              </div>
-            </div>
-
-
-            <div class="column_of_services">
-                <div class="card text-center">
-                  <div class="card-header">
-                    SMS
-                  </div>
-                  <div class="card-body">
-                    <h5 class="card-title">Send SMS</h5>
-                    <p class="card-text">Send a SMS to anybody with just a click</p>
-                    <a href="sms.html" class="btn btn-primary">Use SMS</a>
-                  </div>
-                </div>
-              </div>
-
-              <div class="column_of_services">
-                <div class="card text-center">
-                    <div class="card-header">
-                      chatbot
-                    </div>
-                    <div class="card-body">
-                      <h5 class="card-title">Use Chatbot</h5>
-                      <p class="card-text">Talk to our chatbot our own chatgpt</p>
-                      <a href="chatbot-html.html" class="btn btn-primary">Use chatbot</a>
-                    </div>
-                  </div>z
-              </div>
-        </div>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <input class="form-control form-control-lg" id="subject" type="text" placeholder="Enter your subject" name="subject" aria-label=".form-control-lg example">
+        <textarea class="form-control" placeholder="Leave a message here" id="message" style="height: 100px"></textarea>
+        <button onclick=sendemail() class="btn btn-primary">Send email</button>
+        <div id="content"></div>
     </div>
+
 
     </div>
 
@@ -174,14 +137,26 @@
         crossorigin="anonymous"></script>
 
     <script>
-        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+        function sendemail(){
+            subject = document.getElementById('subject').value
+            message = document.getElementById('message').value
+            // console.log(bucketname)
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://65.0.180.97/cgi-bin/send_mail.py?subject='+subject+"&message="+message);
+            xhr.send();
+            xhr.onreadystatechange = function(){
+                if (this.readyState == 4){
+                // console.log(this.responseText)
+                let a = this.responseText
+                // console.log(a)
+                document.getElementById("content").innerHTML = a;
+                }
+                else{
+                    document.getElementById("content").innerHTML = "some error occured"
+                }
+            }
+        }
     </script>
-
-
-
-
-
 </body>
 
 </html>
